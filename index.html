@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>Turbo Cars</title>
+</head>
+<body>
+    
+    <div class="container pt-5" id="app">
+        <div class="row mb-3">
+            <div class="col">
+                <h1>Turbo cars application</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="search"><h6>Find your car</h6></label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="search" 
+                        placeholder="Name or model..."
+                        v-model="search"
+                    >
+                </div>
+
+                <hr>
+
+                <ul class="list-group">
+                    <li 
+                        v-for="(car,index) in filteredCars"
+                        v-on:click="selectCar(index)"
+                        class="list-group-item list-group-item-action pointer"
+                        :class="{'active': selectedCarIndex === index}"
+                    >
+                    {{ car.name  }} - {{ car.model  }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-8 pt-4">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h2>{{ car.name }}</h2>
+                        <img 
+                            v-bind:src="car.image" 
+                            :alt="car.name" 
+                            class="car-image">
+                    </div>
+
+                    <div class="col-md-5 pt-2">
+                        <h5>Car details</h5>
+
+                        <ul>
+                            <li>Model - <strong>{{ car.model }}</strong></li>
+                            <li>Year - <strong>{{ car.year }}</strong></li>
+                            <li>Owner - <strong>{{ car.owner }}</strong></li>
+                        </ul>
+
+                        <div class="phone-block">
+                            <transition name="phone">
+                                <p v-if="phoneVisibility">{{ car.phone }}</p>
+                            </transition>
+                        </div>
+
+                        <button 
+                            class="btn btn-outline-success"
+                            @click="phoneVisibility = !phoneVisibility"
+                            v-text="phoneBtnText"
+                        >
+                        </button>
+                        <button 
+                            class="btn btn-primary"
+                            @click="modalVisibility = true"
+                        >Buy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div 
+            class="row pt-3"
+            v-if="logs.length"
+        >
+            <div class="col-md-12">
+                <ul class="list-group">
+                    <li 
+                        v-for="log in logs"
+                        class="list-group-item"
+                        :class="{
+                            'list-group-item-secondary': log.type === 'cnl',
+                            'list-group-item-success': log.type === 'ok'
+                        }"
+                    >
+                        {{ log.text }} {{ log.date | date }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- MODAL -->
+        <transition name="modal">
+            <div 
+                class="modal fade show" 
+                tabindex="-1"
+                v-if="modalVisibility"
+            >
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Do you want to buy this car?</h5>
+                    <button 
+                        type="button"
+                        class="btn-close" 
+                        data-bs-dismiss="modal" 
+                        aria-label="Close"
+                        @click="modalVisibility = false"
+                    ></button>
+                    </div>
+                    <div class="modal-body">
+                    <p>Current car - <strong>{{ car.name }}</strong></p>
+
+                    <ul>
+                        <li>Model - <strong>{{ car.model }}</strong></li>
+                        <li>Year - <strong>{{ car.year }}</strong></li>
+                        <li>Owner - <strong>{{ car.owner }}</strong></li>
+                    </ul>
+                    </div>
+                    <div class="modal-footer">
+                    <button 
+                        type="button" 
+                        class="btn btn-primary"
+                        @click="newOrder"
+                    >
+                        Buy
+                    </button>
+
+                    <button 
+                        type="button" 
+                        class="btn btn-secondary" 
+                        data-bs-dismiss="modal"
+                        @click="cancelOrder"
+                    >
+                        Cancel
+                    </button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </transition>
+
+        <!-- BACKDROP -->
+        <transition name="fade">
+            <div 
+            class="modal-backdrop fade show"
+            v-if="modalVisibility"
+            ></div>
+        </transition>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+.car-image {
+    height: 200px; 
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.phone-block {
+    height: 36px;
+}
+
+.modal {
+    display: block;
+}
+
+/* ANIMATIONS */
+.phone-enter-active,
+.phone-leave-active {
+    transition: all .5s ease;
+}
+
+.phone-enter,
+.phone-leave-to {
+    transform: translateX(50px);
+    opacity: 0;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+    transition: all .5s ease;
+}
+
+.modal-enter,
+.modal-leave-to {
+    transform: translateY(-100px);
+    opacity: 0;
+}
+
+.fade-enter-active {
+    animation: .75s fade forwards;
+}
+
+.fade-leave-active {
+    animation: .75s fade reverse;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: .5;
+    }
+}
